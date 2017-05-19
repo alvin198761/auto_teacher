@@ -1,0 +1,1 @@
+java -jar auto_teacher.jar
