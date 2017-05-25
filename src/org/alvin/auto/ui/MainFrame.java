@@ -5,6 +5,7 @@
  */
 package org.alvin.auto.ui;
 
+import org.alvin.auto.service.WordJacobService;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -13,12 +14,17 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.alvin.auto.service.ExcelJacobService;
 
 /**
  *
@@ -45,31 +51,35 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        anwser = new javax.swing.JTextArea();
-        jLabel2 = new javax.swing.JLabel();
-        score = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         paperDir = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        score = new javax.swing.JTextField();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        anwser = new javax.swing.JTextArea();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        startRow = new javax.swing.JTextField();
+        nameCol = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        scroeCol = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        excelPath = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
+        jCheckBox2 = new javax.swing.JCheckBox();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         console = new javax.swing.JTextArea();
-        jButton2 = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabel1.setText("正确答案：");
-
-        anwser.setColumns(20);
-        anwser.setRows(5);
-        jScrollPane1.setViewportView(anwser);
-
-        jLabel2.setText("单题分数：");
-
-        score.setText("2");
 
         jLabel3.setText("试卷目录：");
 
@@ -82,11 +92,12 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        console.setColumns(20);
-        console.setRows(5);
-        jScrollPane2.setViewportView(console);
+        jLabel2.setText("单题分数：");
 
-        jTabbedPane1.addTab("控制台", jScrollPane2);
+        score.setText("2");
+
+        jCheckBox1.setSelected(true);
+        jCheckBox1.setText("自动保存控制台信息");
 
         jButton2.setText("开始阅卷");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -95,8 +106,150 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jCheckBox1.setSelected(true);
-        jCheckBox1.setText("自动保存控制台信息");
+        jLabel1.setText("正确答案：");
+
+        anwser.setColumns(20);
+        anwser.setRows(5);
+        jScrollPane1.setViewportView(anwser);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(score, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(jCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 538, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(28, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(score, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jButton2)
+                    .addComponent(jCheckBox1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addContainerGap(59, Short.MAX_VALUE))
+        );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton2, jLabel1, jLabel2, score});
+
+        jTabbedPane2.addTab("自动改卷", jPanel1);
+
+        jLabel4.setText("起始行数：");
+
+        jLabel5.setText("姓名列数：");
+
+        startRow.setText("5");
+
+        nameCol.setText("2");
+
+        jLabel6.setText("总分列数：");
+
+        scroeCol.setText("3");
+
+        jButton3.setText("开始总结");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("总结文档：");
+
+        excelPath.setEditable(false);
+
+        jButton4.setText("选择");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jCheckBox2.setSelected(true);
+        jCheckBox2.setText("保存控制台");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(18, 18, 18)
+                        .addComponent(excelPath, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(startRow, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jCheckBox2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton3))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(nameCol, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(38, 38, 38)
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(scroeCol, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(93, 93, 93))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(excelPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel4)
+                    .addComponent(startRow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(nameCol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(scroeCol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(43, 43, 43)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jCheckBox2))
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel4, jLabel5, jLabel6, nameCol, scroeCol, startRow});
+
+        jTabbedPane2.addTab("自动总结", jPanel2);
+
+        console.setColumns(20);
+        console.setRows(5);
+        jScrollPane2.setViewportView(console);
+
+        jTabbedPane1.addTab("控制台", jScrollPane2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -104,32 +257,18 @@ public class MainFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(42, 42, 42)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTabbedPane1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
+                        .addComponent(jLabel3)
                         .addGap(12, 12, 12)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(paperDir, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(score, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(27, 27, 27)
-                                        .addComponent(jCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton1)
-                                    .addComponent(jButton2)))
-                            .addComponent(jScrollPane1))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(paperDir, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(jButton1))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 664, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton2});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -139,21 +278,13 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(paperDir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(score, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(jButton2)
-                    .addComponent(jCheckBox1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(29, 29, 29)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
-                .addGap(29, 29, 29))
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton1, jButton2, jLabel1, jLabel2, jLabel3, paperDir, score});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton1, jLabel3, paperDir});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -214,33 +345,77 @@ public class MainFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        int res = JOptionPane.showConfirmDialog(null, "1.请先备份需要检查的文件\n"
+                + "2.确认所有的 excel 程序已经关闭"
+                + "\n3.过程中也不得打开 excel"
+                + "\n4.确认已经试卷已经改完并已经正确的填写了总分"
+                + "\n5.以上四点都确认以后，点击【确定】", "提示", JOptionPane.OK_CANCEL_OPTION);
+        if (res != JOptionPane.OK_OPTION) {
+            return;
+        }
+        if (this.paperDir.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "请选择试卷目录！");
+            this.paperDir.requestFocus();
+            return;
+        }
+        if (this.excelPath.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "请选择总结文档路径！");
+            this.excelPath.requestFocus();
+            return;
+        }
+        if (!this.startRow.getText().trim().matches("\\d+")) {
+            JOptionPane.showMessageDialog(null, "请输入总结填写的起始行！");
+            this.startRow.requestFocus();
+            return;
+        }
+        if (!this.nameCol.getText().trim().matches("\\d+")) {
+            JOptionPane.showMessageDialog(null, "请输入总结姓名列！");
+            this.nameCol.requestFocus();
+            return;
+        }
+        if (!this.scroeCol.getText().trim().matches("\\d+")) {
+            JOptionPane.showMessageDialog(null, "请输入总结分数列！");
+            this.scroeCol.requestFocus();
+            return;
+        }
+        this.console.setText("");
+        new Thread() {
+            @Override
+            public void run() {
+                jButton3.setEnabled(false);
+                autoValuation();
+                if (jCheckBox1.isSelected()) {
+                    try {
+                        saveConsole(console.getText());
+                    } catch (IOException ex) {
+                        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                jButton3.setEnabled(true);
+            }
+
+        }.start();
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        JFileChooser jfc = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel File", "xls", "xlsx");
+        jfc.setFileFilter(filter);
+        jfc.showOpenDialog(this);
+        File f = jfc.getSelectedFile();
+        if (f != null) {
+            this.excelPath.setText(f.getAbsolutePath());
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -252,21 +427,35 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea anwser;
     private javax.swing.JTextArea console;
+    private javax.swing.JTextField excelPath;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTextField nameCol;
     private javax.swing.JTextField paperDir;
     private javax.swing.JTextField score;
+    private javax.swing.JTextField scroeCol;
+    private javax.swing.JTextField startRow;
     // End of variables declaration//GEN-END:variables
     private void saveConsole(String text) throws IOException {
         String date = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
-        try (OutputStream out = Files.newOutputStream(Paths.get(date.concat(".txt")))) {
+        try (OutputStream out = Files.newOutputStream(Paths.get(this.paperDir.getText(), date.concat(".txt")))) {
             out.write(text.getBytes());
         }
     }
@@ -315,10 +504,68 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void check(File paperFile, List<String> answerList, int score) throws Exception {
         this.console.append("检查试卷：" + paperFile.getAbsolutePath() + "\n");
-        try (JacobService jacob = new JacobService()) {
+        try (WordJacobService jacob = new WordJacobService()) {
             jacob.check(paperFile, answerList, score, this.console);
         }
 
+    }
+
+    private void autoValuation() {
+        this.console.append("要总结的目录：" + this.paperDir.getText() + "\n");
+        this.console.append("总结文件：" + this.excelPath.getText() + "\n");
+        this.console.append("开始总结\n");
+        File f = new File(this.paperDir.getText().trim());
+        if (!f.isDirectory()) {
+            JOptionPane.showMessageDialog(null, "您选择的不是目录！");
+            return;
+        }
+        File exclFile = new File(this.excelPath.getText().trim());
+        if (!exclFile.exists()) {
+            JOptionPane.showMessageDialog(null, "excel 文件不存在！");
+            return;
+        }
+        Map<String, String> map = new LinkedHashMap<>();
+        LinkedList<File> list = new LinkedList<File>();
+        list.add(f);
+        while (!list.isEmpty()) {
+            File tmpF = list.removeFirst();
+            if (tmpF.isDirectory()) {
+                for (File subF : tmpF.listFiles()) {
+                    list.add(subF);
+                }
+                continue;
+            }
+
+            if (tmpF.getName().toLowerCase().endsWith(".doc") || tmpF.getName().toLowerCase().endsWith(".docx")) {
+                this.console.append("文件：" + tmpF.getAbsolutePath() + "\t");
+                try {
+                    try (WordJacobService jacob = new WordJacobService()) {
+                        String total = jacob.getTotalScroe(tmpF);
+                        String name = tmpF.getName().toLowerCase();
+                        name = name.substring(0, name.lastIndexOf("."));
+                        map.put(name, total);
+                        this.console.append("总分：" + total);
+                    } catch (IOException ex) {
+                        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    this.console.append("\n----------------------------分割线----------------------------\n");
+                } catch (Exception ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                this.console.append("\n");
+            }
+        }
+
+        try (ExcelJacobService jacob = new ExcelJacobService()) {
+            String baseDir = this.paperDir.getText().trim();
+            int startRowInt = Integer.valueOf(this.startRow.getText().trim());
+            int nameColInt = Integer.valueOf(this.nameCol.getText().trim());
+            int scroeColInt = Integer.valueOf(this.scroeCol.getText().trim());
+            String path = this.excelPath.getText().trim();
+            jacob.valuation(baseDir, startRowInt, nameColInt, scroeColInt, map, path);
+        } catch (IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

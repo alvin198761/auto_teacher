@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.alvin.auto.ui;
+package org.alvin.auto.service;
 
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.ComThread;
@@ -14,39 +14,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.swing.JTextArea;
+import org.alvin.auto.bean.ItemBean;
 
 /**
  *
  * @author tangzhichao
  */
-public class JacobService implements Closeable {
-
-    private Dispatch doc = null;
-    private ActiveXComponent word = null;
-    private Dispatch documents = null;
-
-    public JacobService() {
-        initApplication();
-    }
+public class WordJacobService extends AbstractJacobService {
 
     public void initApplication() {
         ComThread.InitSTA();
-        word = new ActiveXComponent("Word.Application");
-        word.setProperty("Visible", new Variant(false));
-        documents = word.getProperty("Documents").toDispatch();
-    }
-
-    public void openDoc(String docPath) {
-        closeDoc();
-        doc = Dispatch.call(documents, "Open", docPath).toDispatch();
-    }
-
-    public void closeDoc() {
-        if (doc != null) {
-            Dispatch.call(doc, "Save");
-            Dispatch.call(doc, "Close", new Variant(true));
-            doc = null;
-        }
+        app = new ActiveXComponent("Word.Application");
+        app.setProperty("Visible", new Variant(false));
+        documents = app.getProperty("Documents").toDispatch();
     }
 
     public void check(File paperFile, List<String> answerList, int score, JTextArea console) throws Exception {
@@ -95,24 +75,6 @@ public class JacobService implements Closeable {
         setScroe(scoreTable, total);
     }
 
-    @Override
-    public void close() throws IOException {
-        closeDoc();
-        if (word != null) {
-            Dispatch.call(word, "Quit");
-            word = null;
-        }
-        documents = null;
-        ComThread.Release();
-        System.gc();
-    }
-
-    public static void main(String[] args) throws Exception {
-        try (JacobService jacob = new JacobService()) {
-            jacob.check(new File("F:\\test\\test.doc"), null, 0, new JTextArea());
-        }
-    }
-
     private void setScroe(Dispatch scoreTable, int total) {
         Dispatch rows = Dispatch.call(scoreTable, "Rows").toDispatch();
         Dispatch columns = Dispatch.call(scoreTable, "Columns").toDispatch();
@@ -137,6 +99,21 @@ public class JacobService implements Closeable {
             Dispatch.call(Range, "InsertAfter", new Variant(total));
         }
 
+    }
+
+    public static void main(String[] args) throws Exception {
+        try (WordJacobService jacob = new WordJacobService()) {
+            jacob.check(new File("F:\\test\\test.doc"), null, 0, new JTextArea());
+        }
+    }
+
+    public String getTotalScroe(File paperFile) {
+        openDoc(paperFile.getAbsolutePath());
+        Dispatch tables = Dispatch.get(doc, "Tables").toDispatch();
+        Dispatch scoreTable = Dispatch.call(tables, "Item", new Variant(1)).toDispatch();
+        Dispatch totalCell = Dispatch.call(scoreTable, "Cell", new Variant(2), new Variant(5)).toDispatch();
+        Dispatch Range = Dispatch.get(totalCell, "Range").toDispatch();
+        return Dispatch.get(Range, "Text").getString().trim();
     }
 
 }
