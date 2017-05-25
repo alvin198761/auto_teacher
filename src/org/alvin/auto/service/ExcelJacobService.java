@@ -37,7 +37,6 @@ public class ExcelJacobService extends AbstractJacobService {
         Dispatch sheet = Dispatch.invoke(sheets, "Item", Dispatch.Get, new Object[]{"成绩表"}, new int[0]).getDispatch();
         Object[] keys = map.keySet().toArray();
         for (int i = 0; i < keys.length; i++) {
-            startRow++;
             String cName = COLUMNS.charAt(nameCol - 1) + "" + startRow;
             //姓名
             Dispatch cell = Dispatch.invoke(sheet, "Range", Dispatch.Get, new Object[]{cName}, new int[1]).toDispatch();
@@ -46,6 +45,7 @@ public class ExcelJacobService extends AbstractJacobService {
             cName = COLUMNS.charAt(scroeCol - 1) + "" + startRow;
             cell = Dispatch.invoke(sheet, "Range", Dispatch.Get, new Object[]{cName}, new int[1]).toDispatch();
             Dispatch.put(cell, "Value", map.get(keys[i]));
+            startRow++;
         }
     }
 

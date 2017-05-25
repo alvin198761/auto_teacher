@@ -26,7 +26,7 @@ public class WordJacobService extends AbstractJacobService {
         documents = app.getProperty("Documents").toDispatch();
     }
 
-    public void check(File paperFile, List<String> answerList, int score, JTextArea console) throws Exception {
+    public void check(File paperFile, List<String> answerList, double score, JTextArea console) throws Exception {
         openDoc(paperFile.getAbsolutePath());
         Dispatch tables = Dispatch.get(doc, "Tables").toDispatch();
         Dispatch scoreTable = Dispatch.call(tables, "Item", new Variant(1)).toDispatch();
@@ -40,7 +40,7 @@ public class WordJacobService extends AbstractJacobService {
         int rowCount = Dispatch.get(rows, "Count").getInt();
         int colCount = Dispatch.get(columns, "Count").getInt();
 
-        int total = 0;
+        double total = 0;
         for (int r = 1; r <= rowCount; r += 2) {
             for (int c = 2; c <= colCount; c++) {
                 Dispatch cell = Dispatch.call(answerTable, "Cell", new Variant(r), new Variant(c)).toDispatch();
@@ -72,7 +72,7 @@ public class WordJacobService extends AbstractJacobService {
         setScroe(scoreTable, total);
     }
 
-    private void setScroe(Dispatch scoreTable, int total) {
+    private void setScroe(Dispatch scoreTable, double total) {
         Dispatch rows = Dispatch.call(scoreTable, "Rows").toDispatch();
         Dispatch columns = Dispatch.call(scoreTable, "Columns").toDispatch();
 
@@ -104,11 +104,11 @@ public class WordJacobService extends AbstractJacobService {
         }
     }
 
-    public String getTotalScroe(File paperFile) {
+    public String getTotalScroe(File paperFile, int col) {
         openDoc(paperFile.getAbsolutePath());
         Dispatch tables = Dispatch.get(doc, "Tables").toDispatch();
         Dispatch scoreTable = Dispatch.call(tables, "Item", new Variant(1)).toDispatch();
-        Dispatch totalCell = Dispatch.call(scoreTable, "Cell", new Variant(2), new Variant(5)).toDispatch();
+        Dispatch totalCell = Dispatch.call(scoreTable, "Cell", new Variant(2), new Variant(col)).toDispatch();
         Dispatch Range = Dispatch.get(totalCell, "Range").toDispatch();
         return Dispatch.get(Range, "Text").getString().trim();
     }

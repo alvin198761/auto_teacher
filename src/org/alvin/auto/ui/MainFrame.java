@@ -314,7 +314,9 @@ public class MainFrame extends javax.swing.JFrame {
             this.paperDir.requestFocus();
             return;
         }
-        if (!this.score.getText().trim().matches("\\d+")) {
+        try {
+            Double.parseDouble(this.score.getText().trim());
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "选择题分数请输入正确！");
             this.score.requestFocus();
             return;
@@ -462,7 +464,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void doRun() {
         String[] answers = this.anwser.getText().trim().split("\t|\\s|[^A-Za-z]");
         List<String> answerList = new ArrayList<>();
-        int score = Integer.parseInt(this.score.getText().trim());
+        double score = Double.parseDouble(this.score.getText().trim());
         for (String s : answers) {
             answerList.add(s.replaceAll("[^A-Za-z]", "").toUpperCase());
         }
@@ -479,7 +481,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     }
 
-    private void doAutoRun(File f, List<String> answerList, int score) {
+    private void doAutoRun(File f, List<String> answerList, double score) {
         LinkedList<File> list = new LinkedList<File>();
         list.add(f);
         while (!list.isEmpty()) {
@@ -501,7 +503,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
 
-    private void check(File paperFile, List<String> answerList, int score) throws Exception {
+    private void check(File paperFile, List<String> answerList, double score) throws Exception {
         this.console.append("检查试卷：" + paperFile.getAbsolutePath() + "\n");
         try (WordJacobService jacob = new WordJacobService()) {
             jacob.check(paperFile, answerList, score, this.console);
@@ -536,10 +538,13 @@ public class MainFrame extends javax.swing.JFrame {
             }
 
             if (tmpF.getName().toLowerCase().endsWith(".doc") || tmpF.getName().toLowerCase().endsWith(".docx")) {
+                if (tmpF.getName().startsWith("~")) {
+                    continue;
+                }
                 this.console.append("文件：" + tmpF.getAbsolutePath() + "\t");
                 try {
                     try (WordJacobService jacob = new WordJacobService()) {
-                        String total = jacob.getTotalScroe(tmpF);
+                        String total = jacob.getTotalScroe(tmpF, 4);
                         String name = tmpF.getName().toLowerCase();
                         name = name.substring(0, name.lastIndexOf("."));
                         map.put(name, total);
