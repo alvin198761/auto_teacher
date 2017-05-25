@@ -9,12 +9,9 @@ import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.ComThread;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
-import java.io.Closeable;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import javax.swing.JTextArea;
-import org.alvin.auto.bean.ItemBean;
 
 /**
  *
