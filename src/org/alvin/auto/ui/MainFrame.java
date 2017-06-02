@@ -573,7 +573,7 @@ public class MainFrame extends javax.swing.JFrame {
                 this.console.append("文件：" + tmpF.getAbsolutePath() + "\t");
                 try {
                     try (WordJacobService jacob = new WordJacobService()) {
-                        int col = Integer.parseInt(scroeCol.getText().trim());
+                        int col = Integer.parseInt(paperScoreCol.getText().trim());
                         String total = jacob.getTotalScroe(tmpF, col);
                         String name = tmpF.getName().toLowerCase();
                         name = name.substring(0, name.lastIndexOf("."));
