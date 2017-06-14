@@ -12,6 +12,7 @@ import com.jacob.com.Variant;
 import java.io.File;
 import java.util.List;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  *
@@ -111,6 +112,42 @@ public class WordJacobService extends AbstractJacobService {
         Dispatch totalCell = Dispatch.call(scoreTable, "Cell", new Variant(2), new Variant(col)).toDispatch();
         Dispatch Range = Dispatch.get(totalCell, "Range").toDispatch();
         return Dispatch.get(Range, "Text").getString().trim();
+    }
+
+    public String getAnswer(String filePath,JTextArea console) throws Exception {
+        openDoc(filePath );
+        Dispatch tables = Dispatch.get(doc, "Tables").toDispatch();
+        Dispatch answerTable = Dispatch.call(tables, "Item", new Variant(1)).toDispatch();
+        if (answerTable == null) {
+            console.append("没有找到参考答案表格\n");
+            throw new Exception("没有找到参考答案表格:" + filePath);
+        }
+         Dispatch rows = Dispatch.call(answerTable, "Rows").toDispatch();
+        Dispatch columns = Dispatch.call(answerTable, "Columns").toDispatch();
+        int rowCount = Dispatch.get(rows, "Count").getInt();
+        int colCount = Dispatch.get(columns, "Count").getInt();
+        StringBuffer sb = new StringBuffer();
+        for (int r = 1; r <= rowCount; r += 2) {
+            for (int c = 2; c <= colCount; c++) {
+                Dispatch cell = Dispatch.call(answerTable, "Cell", new Variant(r), new Variant(c)).toDispatch();
+                Dispatch Range = Dispatch.get(cell, "Range").toDispatch();
+                String text = Dispatch.get(Range, "Text").getString().trim();
+
+                //获得题号码
+                if (!text.trim().matches("\\d+")) {
+                    continue;
+                }
+//                int questionIndex = Integer.parseInt(text.trim());
+                Dispatch aTr = Dispatch.call(answerTable, "Cell", new Variant(r + 1), new Variant(c)).toDispatch();
+                Range = Dispatch.get(aTr, "Range").toDispatch();
+                String stuAnswer = Dispatch.get(Range, "Text").getString().trim().replaceAll("[^A-Za-z]", "").toUpperCase();
+                if(sb.length() > 0){
+                    sb.append(",");
+                }
+                sb.append(stuAnswer);
+            }
+        }
+        return sb.toString();
     }
 
 }
