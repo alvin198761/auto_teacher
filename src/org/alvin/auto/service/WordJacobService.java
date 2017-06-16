@@ -114,15 +114,16 @@ public class WordJacobService extends AbstractJacobService {
         return Dispatch.get(Range, "Text").getString().trim();
     }
 
-    public String getAnswer(String filePath,JTextArea console) throws Exception {
-        openDoc(filePath );
+    public String getAnswer(String filePath, JTextArea console) throws Exception {
+        openDoc(filePath);
         Dispatch tables = Dispatch.get(doc, "Tables").toDispatch();
-        Dispatch answerTable = Dispatch.call(tables, "Item", new Variant(1)).toDispatch();
+        int count = Dispatch.get(tables, "Count").getInt();
+        Dispatch answerTable = Dispatch.call(tables, "Item", new Variant(count)).toDispatch();
         if (answerTable == null) {
             console.append("没有找到参考答案表格\n");
             throw new Exception("没有找到参考答案表格:" + filePath);
         }
-         Dispatch rows = Dispatch.call(answerTable, "Rows").toDispatch();
+        Dispatch rows = Dispatch.call(answerTable, "Rows").toDispatch();
         Dispatch columns = Dispatch.call(answerTable, "Columns").toDispatch();
         int rowCount = Dispatch.get(rows, "Count").getInt();
         int colCount = Dispatch.get(columns, "Count").getInt();
@@ -141,7 +142,7 @@ public class WordJacobService extends AbstractJacobService {
                 Dispatch aTr = Dispatch.call(answerTable, "Cell", new Variant(r + 1), new Variant(c)).toDispatch();
                 Range = Dispatch.get(aTr, "Range").toDispatch();
                 String stuAnswer = Dispatch.get(Range, "Text").getString().trim().replaceAll("[^A-Za-z]", "").toUpperCase();
-                if(sb.length() > 0){
+                if (sb.length() > 0) {
                     sb.append(",");
                 }
                 sb.append(stuAnswer);
