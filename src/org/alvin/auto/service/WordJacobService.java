@@ -114,10 +114,13 @@ public class WordJacobService extends AbstractJacobService {
         return Dispatch.get(Range, "Text").getString().trim();
     }
 
-    public String getAnswer(String filePath, JTextArea console) throws Exception {
+    public String getAnswer(String filePath, JTextArea console, int answerTableIndex) throws Exception {
         openDoc(filePath);
         Dispatch tables = Dispatch.get(doc, "Tables").toDispatch();
-        int count = Dispatch.get(tables, "Count").getInt();
+        int count = answerTableIndex;
+        if (count == 0) {
+            count = Dispatch.get(tables, "Count").getInt();
+        }
         Dispatch answerTable = Dispatch.call(tables, "Item", new Variant(count)).toDispatch();
         if (answerTable == null) {
             console.append("没有找到参考答案表格\n");
@@ -147,6 +150,13 @@ public class WordJacobService extends AbstractJacobService {
                 }
                 sb.append(stuAnswer);
             }
+        }
+        if (sb.toString().trim().isEmpty()) {
+            count = Dispatch.get(tables, "Count").getInt();
+            if (count <= answerTableIndex) {
+                return "";
+            }
+            return this.getAnswer(filePath, console, answerTableIndex + 1);
         }
         return sb.toString();
     }

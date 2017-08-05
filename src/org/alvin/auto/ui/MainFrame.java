@@ -507,19 +507,19 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void doRun() {
-        if(this.anwser.getText().trim().isEmpty()){
-             this.console.append("没有填写参考答案，自动获取中...\n");
-         try (WordJacobService jacob = new WordJacobService()) {
-             String answer =jacob.getAnswer(this.answerDocText.getText().trim(),this.console);
-             if(answer == null || answer.trim().isEmpty()){
-                 throw new Exception();
-             }
-             this.anwser.setText(answer);
-         }catch(Exception ex){
-             ex.printStackTrace();
-             JOptionPane.showMessageDialog(null, "自动获取答案出错，请手动输入");
-             return ;
-         }
+        if (this.anwser.getText().trim().isEmpty()) {
+            this.console.append("没有填写参考答案，自动获取中...\n");
+            try (WordJacobService jacob = new WordJacobService()) {
+                String answer = jacob.getAnswer(this.answerDocText.getText().trim(), this.console, 0);
+                if (answer == null || answer.trim().isEmpty()) {
+                    throw new Exception();
+                }
+                this.anwser.setText(answer);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "自动获取答案出错，请手动输入");
+                return;
+            }
         }
         String[] answers = this.anwser.getText().trim().split("\t|\\s|[^A-Za-z]");
         List<String> answerList = new ArrayList<>();
